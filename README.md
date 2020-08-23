@@ -5,7 +5,7 @@ O objetivo principal deste sistema é fazer match entre equipamentos de doadores
 Para aplicação Servidor, serão utilizadas as seguintes tecnologias:
 - [Adonis Js](https://adonisjs.com/)
 - [PostgreSQL](https://www.postgresql.org/)
-- [Nmp](https://www.npmjs.com/)
+- [Npm](https://www.npmjs.com/)
 - [Adonis Scheduler](https://www.npmjs.com/package/adonis-scheduler)
 
 # Escopo do Projeto
