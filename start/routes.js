@@ -22,3 +22,9 @@ Route.get('/', () => {
 
 Route.post('/api/auth/register', 'AuthController.register');
 Route.post('/api/auth/login', 'AuthController.authenticate');
+
+Route.group(() => {
+    Route.resource('/api/users', 'UserDetailController')
+        .apiOnly()
+        .except('update')
+}).middleware(['auth']);
