@@ -20,11 +20,20 @@ Route.get('/', () => {
     return { greeting: 'Hello world in JSON' }
 })
 
+// Authentication Routes
 Route.post('/api/auth/register', 'AuthController.register');
 Route.post('/api/auth/login', 'AuthController.authenticate');
 
+// User Detail Routes
 Route.group(() => {
     Route.resource('/api/users', 'UserDetailController')
+        .apiOnly()
+        .except('update')
+}).middleware(['auth']);
+
+// Action Routes
+Route.group(() => {
+    Route.resource('/api/actions', 'ActionController')
         .apiOnly()
         .except('update')
 }).middleware(['auth']);

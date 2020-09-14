@@ -4,16 +4,16 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-const UserDetail = use("App/Models/UserDetail");
+const Action = use('App/Models/Action');
 
 /**
- * Resourceful controller for interacting with userdetails
+ * Resourceful controller for interacting with actions
  */
-class UserDetailController {
 
+class ActionController {
     /**
-     * Show a list of all userdetails.
-     * GET userdetails
+     * Show a list of all actions.
+     * GET actions
      *
      * @param {object} ctx
      * @param {Request} ctx.request
@@ -21,32 +21,31 @@ class UserDetailController {
      * @param {View} ctx.view
      */
     async index() {
-        const userDetails = UserDetail.query().with('user').fetch();
-        return userDetails;
+        const actions = Action.query().with('user').fetch();
+        return actions;
     }
 
-
     /**
-     * Create/save a new userdetail.
-     * POST userdetails
+     * Create/save a new action.
+     * POST actions
      *
      * @param {object} ctx
      * @param {Request} ctx.request
      * @param {Response} ctx.response
      */
     async store({ request, auth }) {
-        const data = request.only(['fullname', 'phone']);
-        const userDetail = await UserDetail.create({
+        const devices = request.only(['devices']);
+        const devicesJson = JSON.stringify(devices);
+        const action = await Action.create({
             user_id: auth.user.id,
-            ...data
-        });
-
-        return userDetail;
+            devices: devicesJson
+        })
+        return action;
     }
 
     /**
-     * Display a single userdetail.
-     * GET userdetails/:id
+     * Display a single action.
+     * GET actions/:id
      *
      * @param {object} ctx
      * @param {Request} ctx.request
@@ -54,13 +53,13 @@ class UserDetailController {
      * @param {View} ctx.view
      */
     async show({ params }) {
-        const userDetail = await UserDetail.query().with('user').where('id', params.id).first();
-        return userDetail;
+        const action = await Action.query().with('user').where('id', params.id).first();
+        return action;
     }
 
     /**
-     * Update userdetail details.
-     * PUT or PATCH userdetails/:id
+     * Update action details.
+     * PUT or PATCH actions/:id
      *
      * @param {object} ctx
      * @param {Request} ctx.request
@@ -69,20 +68,20 @@ class UserDetailController {
     async update({ params, request, response }) {}
 
     /**
-     * Delete a userdetail with id.
-     * DELETE userdetails/:id
+     * Delete a action with id.
+     * DELETE actions/:id
      *
      * @param {object} ctx
      * @param {Request} ctx.request
      * @param {Response} ctx.response
      */
     async destroy({ params, auth, response }) {
-        const userDetail = await UserDetail.findOrFail(params.id);
-        if (auth.user.id !== userDetail.user_id) {
+        const action = await Action.findOrFail(params.id);
+        if (auth.user.id !== action.user_id) {
             return response.status(401);
         }
-        userDetail.delete();
+        action.delete();
     }
 }
 
-module.exports = UserDetailController
+module.exports = ActionController
