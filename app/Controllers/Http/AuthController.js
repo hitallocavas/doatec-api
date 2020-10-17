@@ -6,12 +6,13 @@ class AuthController {
 
     async register({ request }) {
 
-        const userModel = request.only(['username', 'email', 'password']);
+        console.log(request.body)
+
+        const userModel = request.only(['name', 'mail', 'password', 'role']);
 
         const createdUser = await User.create(userModel);
 
         return createdUser;
-
 
     }
 
@@ -19,9 +20,11 @@ class AuthController {
 
         const { email, password } = request.all();
 
+        const user = User.query().findBy('email', email);
+
         const token = await auth.attempt(email, password);
 
-        return token;
+        return {...user, token };
 
     }
 }

@@ -7,7 +7,9 @@ class ActionSchema extends Schema {
     up() {
         this.create('actions', (table) => {
             table.increments()
-            table.json('devices')
+            table.boolean('checkComputador').notNullable()
+            table.boolean('checkTablet').notNullable()
+            table.boolean('checkCelular').notNullable()
             table.integer('user_id')
                 .unsigned()
                 .references('id')
