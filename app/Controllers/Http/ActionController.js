@@ -20,7 +20,8 @@ class ActionController {
     async store({ request }) {
         const data = request.only(['checkComputador', 'checkTablet', 'checkCelular', 'user_id']);
         const action = await Action.create({
-            ...data
+            ...data,
+            pings: 0
         })
         return action;
     }
