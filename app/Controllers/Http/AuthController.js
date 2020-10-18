@@ -16,16 +16,13 @@ class AuthController {
 
     }
 
-    async authenticate({ request, auth }) {
+    async authenticate({ request }) {
 
         const { mail, password } = request.all();
 
-        const user = User.query().findBy('mail', mail);
+        const user = User.query().where('mail', '=', mail).fetch();
 
-        const token = await auth.attempt(mail, password);
-
-        return {...user, token };
-
+        return user;
     }
 }
 
