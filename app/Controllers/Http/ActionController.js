@@ -17,6 +17,12 @@ class ActionController {
         return actions;
     }
 
+    async findByUserId({ params }) {
+        const userId = params.id;
+        const actions = Action.query().with('user').where('user_id', userId).fetch();
+        return actions;
+    }
+
     async store({ request }) {
         const data = request.only(['checkComputador', 'checkTablet', 'checkCelular', 'user_id']);
         const action = await Action.create({

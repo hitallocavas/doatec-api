@@ -8,6 +8,12 @@ class DeviceController {
         return devices;
     }
 
+    async findByUserId({ params }) {
+        const userId = params.id;
+        const devices = Device.query().with('user').where('userId', userId).fetch();
+        return devices;
+    }
+
     async store({ request }) {
         const data = request.only(['radioTipoEquip',
             'radioEscala',

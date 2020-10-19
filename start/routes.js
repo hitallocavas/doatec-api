@@ -16,7 +16,13 @@ Route.group(() => {
     Route.resource('/api/actions', 'ActionController')
         .apiOnly()
         .except('update')
+        .except('findByUserId')
 });
+
+Route.get('/api/actions/user/:id', 'ActionController.findByUserId');
+Route.get('/api/devices/user/:id', 'DeviceController.findByUserId');
+
+
 
 // Devices Routes
 Route.group(() => {
