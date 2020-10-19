@@ -31,6 +31,8 @@ class Matching extends Task {
         // Check devices and actions matching
         if (!this.isEmptyArray(computerActions) && !this.isEmptyArray(computerDevices)) {
             console.log('computerMatching');
+            console.log(computerActions);
+            console.log(computerDevices);
         }
 
         if (!this.isEmptyArray(smartphoneActions) && !this.isEmptyArray(smartphoneDevices)) {

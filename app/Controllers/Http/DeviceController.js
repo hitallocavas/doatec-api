@@ -14,6 +14,7 @@ class DeviceController {
             'inputProblEquip',
             'inputReparoEquip',
             'inputDescrEquip',
+            'inputTituloEquip',
             'userId'
         ]);
         const device = await Device.create({

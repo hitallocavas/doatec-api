@@ -8,7 +8,7 @@ class AuthController {
 
         console.log(request.body)
 
-        const userModel = request.only(['name', 'mail', 'password', 'role']);
+        const userModel = request.only(['name', 'email', 'password', 'role']);
 
         const createdUser = await User.create(userModel);
 
@@ -16,13 +16,16 @@ class AuthController {
 
     }
 
-    async authenticate({ request }) {
+    async authenticate({ request, auth }) {
 
-        const { mail, password } = request.all();
+        const { email, password } = request.all();
 
-        const user = User.query().where('mail', '=', mail).fetch();
+        const user = await User.query().where('email', '=', email).first();
 
-        return user;
+        const token = await auth.attempt(email, password);
+
+        return user.toJSON();
+
     }
 }
 
