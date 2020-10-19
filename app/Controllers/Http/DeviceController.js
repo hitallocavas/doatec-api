@@ -10,7 +10,7 @@ class DeviceController {
 
     async findByUserId({ params }) {
         const userId = params.id;
-        const devices = Device.query().with('user').where('userId', userId).fetch();
+        const devices = Device.query().with('user').where('user_id', userId).fetch();
         return devices;
     }
 
@@ -21,7 +21,7 @@ class DeviceController {
             'inputReparoEquip',
             'inputDescrEquip',
             'inputTituloEquip',
-            'userId'
+            'user_id'
         ]);
         const device = await Device.create({
             ...data,
