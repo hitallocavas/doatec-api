@@ -1,9 +1,10 @@
 'use strict'
 
-const Task = use('Task')
+const Task = use('Task');
 const Action = use('App/Models/Action');
 const Device = use('App/Models/Device');
-const Mail = use('Mail')
+const Match = use('App/Models/Match');
+const Mail = use('Mail');
 
 class Matching extends Task {
     static get schedule() {
@@ -39,7 +40,7 @@ class Matching extends Task {
         const tabletActions = actions.filter(action => action.checkTablet === true && action.user_id !== null);
 
         // Extract devices by type
-        const computerDevices = devices.filter(device => device.radioTipoEquip === 'computador' && device.user_id !== null);
+        const computerDevices = devices.filter(device => device.radioTipoEquip === 'computador' && device.isAvailable === true && device.user_id !== null);
         const smartphoneDevices = devices.filter(device => device.radioTipoEquip === 'celular' && device.isAvailable === true && device.user_id !== null);
         const tabletDevices = devices.filter(device => device.radioTipoEquip === 'tablet' && device.isAvailable === true && device.user_id !== null);
 
@@ -66,18 +67,38 @@ class Matching extends Task {
         for (let index = 0; index < qtdTotal; index++) {
             const actionMatching = actions[index];
             const deviceMatching = devices[index];
-
+            this.updateMatches(actionMatching, deviceMatching);
             this.notify(actionMatching, deviceMatching);
         }
     }
 
-    notify(actionMatching, deviceMatching) {
+    async updateMatches(action, device) {
+
+        const data = {
+            action_id: action.id,
+            device_id: device.id,
+            action_user_id: action.user_id,
+            device_user_id: device.user_id
+        };
+
+        await Match.create(data);
+    }
+
+    async notify(actionMatching, deviceMatching) {
         const actionMessage = this.mountActionMailMessage(deviceMatching);
         const deviceMessage = this.mountDeviceMailMessage(actionMatching);
         this.updateDeviceAvailable(deviceMatching.id);
         this.updateActionPings(actionMatching.id);
-        this.sendMail('OLÁ, ENCONTRAMOS UM DOADOAR PARA SUA AÇÃO DO BEM!!! :D <3', actionMessage, actionMatching.user.email);
-        this.sendMail('OLÁ, ENCONTRAMOS UMA INSTITUIÇÃO PARA DOAÇÃO DO SEU EQUIPAMENTO!!! :D <3', deviceMessage, deviceMatching.user.email);
+        await this.sendMail('OLÁ, ENCONTRAMOS UM DOADOAR PARA SUA AÇÃO DO BEM!!! :D <3', actionMessage, actionMatching.user.email);
+        await this.sendMail('OLÁ, ENCONTRAMOS UMA INSTITUIÇÃO PARA DOAÇÃO DO SEU EQUIPAMENTO!!! :D <3', deviceMessage, deviceMatching.user.email);
+    }
+
+    async sendMail(subject, message, destinatary) {
+        await Mail.raw(message, (message) => {
+            message.subject(subject)
+            message.from('noreply.doatec@gmail.com')
+            message.to(destinatary)
+        })
     }
 
     async updateDeviceAvailable(deviceId) {
@@ -93,7 +114,6 @@ class Matching extends Task {
     }
 
     mountActionMailMessage(device) {
-
         const message = '<h1>Encontramos um Doador para Sua Acão!</h1>';
         const p1 = '<p>E-mail do Doador: ' + device.user.email + '</p>';
         const p2 = '<h4>Dados do Equipamento:</h4>'
@@ -104,7 +124,6 @@ class Matching extends Task {
         const p7 = '<p>Necessidade de Reparo do Equipamento: ' + device.inputReparoEquip + '</p>';
         const p8 = '<p>Descrição do Equipamento: ' + device.inputDescrEquip + '</p>';
         return message.concat(p1 + p2 + p3 + p4 + p5 + p6 + p7 + p8);
-
     }
 
     mountDeviceMailMessage(action) {
@@ -113,13 +132,6 @@ class Matching extends Task {
         return message.concat(p1);
     }
 
-    async sendMail(subject, message, destinatary) {
-        await Mail.raw(message, (message) => {
-            message.subject(subject)
-            message.from('noreply.doatec@gmail.com')
-            message.to(destinatary)
-        })
-    }
 
     isEmptyArray(arr) {
         return !Array.isArray(arr) || !arr.length;
