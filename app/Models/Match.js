@@ -4,9 +4,6 @@
 const Model = use('Model')
 
 class Match extends Model {
-    user() {
-        return this.belongsTo('App/Models/User')
-    }
 
     device() {
         return this.belongsTo('App/Models/Device')

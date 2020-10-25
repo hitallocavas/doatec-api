@@ -34,3 +34,4 @@ Route.group(() => {
 Route.get('/api/actions/user/:id', 'ActionController.findByUserId');
 Route.get('/api/devices/user/:id', 'DeviceController.findByUserId');
 Route.get('/api/matches/user/:id', 'MatchController.findByUserId');
+Route.get('/api/matches/', 'MatchController.index');
