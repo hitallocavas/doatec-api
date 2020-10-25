@@ -6,8 +6,6 @@ class AuthController {
 
     async register({ request }) {
 
-        console.log(request.body)
-
         const userModel = request.only(['name', 'email', 'password', 'role']);
 
         const createdUser = await User.create(userModel);

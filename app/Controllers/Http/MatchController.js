@@ -4,15 +4,6 @@ const Match = use('App/Models/Match');
 
 
 class MatchController {
-    async index() {
-        const matches = Match.query()
-                             .with('action')
-                             .with('device')
-                             .with('action.user')
-                             .with('device.user')
-                             .fetch();
-        return matches;
-    }
 
     async findByUserId({params, response}) {
         const userId = params.id;
