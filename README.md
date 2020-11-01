@@ -17,6 +17,9 @@ Para aplicação Servidor, serão utilizadas as seguintes tecnologias:
 - Match de Equipamentos Cadastrados e Donatários por Localização
 - Notificação de Match aos doadores e donatários.
 
+# Documentação da API
+Para ter acesso à documentação completa da API, [Clique Aqui](https://documenter.getpostman.com/view/6586784/TVYF8e3s).
+
 # Equipe
 - Hitallo Cavalcanti [@hitallocavas](https://github.com/hitallocavas/)
 - Moizes Gabriel [@poesiabinaria](https://github.com/poesiabinaria)
